@@ -23,8 +23,8 @@ const NouteStats = ({ noute, userId }: NouteStatsProps) => {
     const [isSaved, setIsSaved] = useState(false);
 
     const { mutate: likeNoute } = useLikeNoute();
-    const { mutate: saveNoute, isPending: isSavingNoute } = useSaveNoute();
-    const { mutate: deleteSavedNoute, isPending: isDeletingSavedNoute } =
+    const { mutate: saveNoute, isLoading: isSavingNoute } = useSaveNoute();
+    const { mutate: deleteSavedNoute, isLoading: isDeletingSavedNoute } =
         useDeleteSavedNoute();
 
     const { data: currentUser } = useGetCurrentUser();

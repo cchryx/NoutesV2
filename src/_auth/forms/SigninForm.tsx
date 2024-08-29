@@ -33,7 +33,7 @@ const SigninForm = () => {
         },
     });
 
-    const { mutateAsync: signInAccount, isPending } = useSignInAccount();
+    const { mutateAsync: signInAccount, isLoading } = useSignInAccount();
 
     async function onSubmit(values: z.infer<typeof SigninValidation>) {
         const session = await signInAccount({
@@ -117,7 +117,7 @@ const SigninForm = () => {
                     />
 
                     <Button type="submit" className="shad-button_primary">
-                        {isPending || isUserLoading ? (
+                        {isLoading || isUserLoading ? (
                             <div className="flex-center gap-2">
                                 <Loader /> Loading...
                             </div>

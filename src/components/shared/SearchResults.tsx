@@ -13,9 +13,9 @@ const SearchResults = ({
 }: SearchResultsProps) => {
     if (isSearchFetching) return <Loader />;
 
-    if (searchedNoutes && searchedNoutes.documents.length > 0) {
+    if (searchedNoutes && searchedNoutes.length > 0) {
         console.log(searchedNoutes);
-        return <GridNoutesList noutes={searchedNoutes.documents} />;
+        return <GridNoutesList noutes={searchedNoutes} />;
     }
 
     return (

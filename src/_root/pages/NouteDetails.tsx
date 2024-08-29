@@ -15,8 +15,8 @@ const NouteDetails = () => {
     const { id } = useParams();
     const { user } = useUserContext();
 
-    const { data: noute, isPending } = useGetNouteById(id);
-    const { data: userNoutes, isPending: isUserNoutesLoading } =
+    const { data: noute, isLoading } = useGetNouteById(id);
+    const { data: userNoutes, isLoading: isUserNoutesLoading } =
         useGetUserNoutes(noute?.creator.$id);
     const { mutate: deletenoute } = useDeleteNoute();
 
@@ -47,7 +47,7 @@ const NouteDetails = () => {
                 </Button>
             </div>
 
-            {isPending || !noute ? (
+            {isLoading || !noute ? (
                 <Loader />
             ) : (
                 <div className="noute_details-card">

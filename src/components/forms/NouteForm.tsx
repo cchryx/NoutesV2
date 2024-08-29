@@ -31,9 +31,9 @@ const NouteForm = ({ noute, action }: NouteFormProps) => {
     const { toast } = useToast();
     const { user } = useUserContext();
 
-    const { mutateAsync: createNoute, isPending: isPendingCreate } =
+    const { mutateAsync: createNoute, isLoading: isLoadingCreate } =
         useCreateNoute();
-    const { mutateAsync: updateNoute, isPending: isPendingUpdate } =
+    const { mutateAsync: updateNoute, isLoading: isLoadingUpdate } =
         useUpdateNoute();
 
     const form = useForm<z.infer<typeof NouteValidation>>({
@@ -170,9 +170,9 @@ const NouteForm = ({ noute, action }: NouteFormProps) => {
                     <Button
                         type="submit"
                         className="shad-button_primary whitespace-nowrap"
-                        disabled={isPendingCreate || isPendingUpdate}
+                        disabled={isLoadingCreate || isLoadingUpdate}
                     >
-                        {isPendingCreate || (isPendingUpdate && <Loader />)}
+                        {isLoadingCreate || (isLoadingUpdate && <Loader />)}
                         {action} Noute
                     </Button>
                 </div>
