@@ -1,24 +1,47 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
-
-import { Input } from "@/components/ui/input";
-import { useGetNoutes, useSearchNoutes } from "@/lib/react-query/queries";
-import useDebounce from "@/hooks/useDebounce";
-import { Loader } from "@/components/shared";
-import SearchResults from "@/components/shared/SearchResults";
-import GridNoutesLists from "@/components/shared/GridNoutesList";
 import { useInView } from "react-intersection-observer";
+
+import { Input } from "@/components/ui";
+import useDebounce from "@/hooks/useDebounce";
+import { GridNoutesList, Loader } from "@/components/shared";
+import { useGetNoutes, useSearchNoutes } from "@/lib/react-query/queries";
+
+export type SearchResultProps = {
+    isSearchFetching: boolean;
+    searchedNoutes: any;
+};
+
+const SearchResults = ({
+    isSearchFetching,
+    searchedNoutes,
+}: SearchResultProps) => {
+    if (isSearchFetching) {
+        return <Loader />;
+    } else if (searchedNoutes && searchedNoutes.documents.length > 0) {
+        return <GridNoutesList noutes={searchedNoutes.documents} />;
+    } else {
+        return (
+            <p className="text-light-4 mt-10 text-center w-full">
+                No results found
+            </p>
+        );
+    }
+};
 
 const Explore = () => {
     const { ref, inView } = useInView();
     const { data: noutes, fetchNextPage, hasNextPage } = useGetNoutes();
 
-    const [searchValue, setsearchValue] = useState("");
-    const debouncedValue = useDebounce(searchValue, 500);
+    const [searchValue, setSearchValue] = useState("");
+    const debouncedSearch = useDebounce(searchValue, 500);
     const { data: searchedNoutes, isFetching: isSearchFetching } =
-        useSearchNoutes(debouncedValue);
+        useSearchNoutes(debouncedSearch);
 
     useEffect(() => {
-        if (inView && !searchValue) fetchNextPage();
+        if (inView && !searchValue) {
+            fetchNextPage();
+        }
     }, [inView, searchValue]);
 
     if (!noutes)
@@ -31,7 +54,7 @@ const Explore = () => {
     const shouldShowSearchResults = searchValue !== "";
     const shouldShowNoutes =
         !shouldShowSearchResults &&
-        noutes.pages.every((item) => item?.documents.length === 0);
+        noutes.pages.every((item) => item && item.documents.length === 0);
 
     return (
         <div className="explore-container">
@@ -40,16 +63,19 @@ const Explore = () => {
                 <div className="flex gap-1 px-4 w-full rounded-lg bg-dark-4">
                     <img
                         src="/assets/images/icons/search.svg"
-                        alt="search"
                         width={24}
                         height={24}
+                        alt="search"
                     />
                     <Input
                         type="text"
                         placeholder="Search"
                         className="explore-search"
                         value={searchValue}
-                        onChange={(e) => setsearchValue(e.target.value)}
+                        onChange={(e) => {
+                            const { value } = e.target;
+                            setSearchValue(value);
+                        }}
                     />
                 </div>
             </div>
@@ -63,9 +89,9 @@ const Explore = () => {
                     </p>
                     <img
                         src="/assets/images/icons/filter.svg"
-                        alt="filter"
                         width={20}
                         height={20}
+                        alt="filter"
                     />
                 </div>
             </div>
@@ -81,12 +107,15 @@ const Explore = () => {
                         End of noutes
                     </p>
                 ) : (
-                    noutes.pages.map((item, index) => (
-                        <GridNoutesLists
-                            key={`page-${index}`}
-                            noutes={item.documents}
-                        />
-                    ))
+                    noutes.pages.map(
+                        (item, index) =>
+                            item && (
+                                <GridNoutesList
+                                    key={`page-${index}`}
+                                    noutes={item.documents}
+                                />
+                            )
+                    )
                 )}
             </div>
 
