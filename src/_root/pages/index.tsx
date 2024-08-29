@@ -1,0 +1,10 @@
+export { default as Home } from "./Home";
+export { default as Explore } from "./Explore";
+export { default as Saved } from "./Saved";
+export { default as CreateNoute } from "./CreateNoute";
+export { default as Profile } from "./Profile";
+export { default as UpdateProfile } from "./UpdateProfile";
+export { default as EditNoute } from "./EditNoute";
+export { default as NouteDetails } from "./NouteDetails";
+export { default as AllUsers } from "./AllUsers";
+export { default as LikedNoutes } from "./LikedNoutes";
