@@ -366,8 +366,12 @@ export async function deleteNoute(nouteId?: string, imageId?: string) {
     }
 }
 
-export async function getInfiniteNoutes({ pageParam }: { pageParam: number }) {
-    const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(10)];
+export async function getInfiniteNoutes({
+    pageParam = 0,
+}: {
+    pageParam?: number;
+}) {
+    const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(9)];
 
     if (pageParam) {
         queries.push(Query.cursorAfter(pageParam.toString()));
